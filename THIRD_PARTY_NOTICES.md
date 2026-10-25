@@ -1,6 +1,6 @@
 # Third-party notices
 
-amagi-benchy-archive reads the output formats of llama-benchy and is meant to sit next to it and next to Alex Ziskind's llama-benchy-viz front-ends. It does not import or vendor their code. One test fixture, `tests/fixtures/llama_benchy_sample.json`, is the sample report from llama-benchy's `schemas/sample.json` (commit e9be344), trimmed of its time-series arrays. The licenses of all three upstream projects are reproduced below.
+amagi-benchy-archive reads the output formats of llama-benchy and is meant to sit next to it and next to Alex Ziskind's llama-benchy-viz front-ends. It does not import or vendor their code. One test fixture, `tests/fixtures/llama_benchy_sample.json`, is the sample report from llama-benchy's `schemas/sample.json` (commit e9be344), trimmed of its time-series arrays. Two more, `tests/fixtures/mock_run_report.json` and `tests/fixtures/mock_run_progress.jsonl`, are the output of one llama-benchy run (commit e9be344) against llama-benchy's own `tests/mock_server.py`. The licenses of all three upstream projects are reproduced below.
 
 ## llama-benchy
 

@@ -10,7 +10,8 @@ def ev(type_, ts, **kw):
 
 
 def request(rid, t0, *, pp=512, tg=4, depth=0, conc=1, run_index=0, ttfr=0.2, chunk_dt=0.1,
-            chunk_tokens=(1, 1, 1, 1), prompt_tokens=None, error="", model="test/model"):
+            chunk_tokens=(1, 1, 1, 1), prompt_tokens=None, error="", model="test/model",
+            estimated=False, total_tokens=None):
     """One request: start at t0, first response after ttfr, then one chunk every chunk_dt."""
     out = [ev("request_start", t0, request_id=rid, model=model, base_url="http://x/v1", prompt_size=pp,
               response_size=tg, context_size=depth, concurrency=conc, run_index=run_index, target_label="")]
@@ -22,9 +23,10 @@ def request(rid, t0, *, pp=512, tg=4, depth=0, conc=1, run_index=0, ttfr=0.2, ch
     out.append(ev("request_first_token", t0 + ttfr, request_id=rid, ttft_s=ttfr))
     t = t0 + ttfr
     for i, n in enumerate(chunk_tokens):
-        out.append(ev("tokens", t + i * chunk_dt, request_id=rid, count=n, snippet="x"))
+        extra = {"estimated": True} if estimated else {}
+        out.append(ev("tokens", t + i * chunk_dt, request_id=rid, count=n, snippet="x", **extra))
     end = t + (len(chunk_tokens) - 1) * chunk_dt
-    out.append(ev("request_end", end, request_id=rid, total_tokens=sum(chunk_tokens),
+    out.append(ev("request_end", end, request_id=rid, total_tokens=sum(chunk_tokens) if total_tokens is None else total_tokens,
                   prompt_tokens=pp + depth if prompt_tokens is None else prompt_tokens,
                   decode_seconds=end - t, error=""))
     return out

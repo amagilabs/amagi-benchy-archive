@@ -53,6 +53,23 @@ def test_progress_multi_token_chunks_counted():
     events = stream(request(0, 1000.0, chunk_tokens=(1, 3, 3, 3), tg=10))
     (c,) = parse_progress(events).cells
     assert c.metrics["tg_tps"]["mean"] == pytest.approx(30.0)
+    # a burst shorter than 1 s is rated over its own length: 10 tokens / 0.3 s
+    assert c.metrics["peak_tps"]["mean"] == pytest.approx(10 / 0.3)
+    assert c.metrics["peak_req_tps"]["mean"] == pytest.approx(10 / 0.3)
+
+
+def test_progress_estimated_counts_spread_over_reported_total():
+    # server sent no token ids: 4 chunks over 0.3 s, request_end says 7 tokens.
+    # llama-benchy spreads 7 timestamps evenly -> 6 after the first in 0.3 s = 20 t/s.
+    events = stream(request(0, 1000.0, chunk_tokens=(1, 1, 1, 1), estimated=True, total_tokens=7))
+    (c,) = parse_progress(events).cells
+    assert c.metrics["tg_tps"]["mean"] == pytest.approx(20.0)
+
+
+def test_peak_uses_sliding_one_second_window():
+    # 31 single-token chunks 0.1 s apart (3 s): any 1 s window holds 10 of them.
+    events = stream(request(0, 1000.0, chunk_tokens=(1,) * 31, tg=31))
+    (c,) = parse_progress(events).cells
     assert c.metrics["peak_tps"]["mean"] == pytest.approx(10.0)
 
 
@@ -77,8 +94,8 @@ def test_progress_concurrency_uses_batch_throughput():
     )
     (c,) = parse_progress(events).cells
     assert c.concurrency == 2
-    # batch: 8 total tokens / (last token - first token = 0.3 s)
-    assert c.metrics["tg_tps"]["mean"] == pytest.approx(8 / 0.3)
+    # batch: tokens after each request's first (3 + 3) / (last token - first token = 0.3 s)
+    assert c.metrics["tg_tps"]["mean"] == pytest.approx(6 / 0.3)
     assert c.metrics["tg_req_tps"]["mean"] == pytest.approx(10.0)
 
 
@@ -136,3 +153,22 @@ def test_sniff(tmp_path):
     jl = write_jsonl(tmp_path / "p.jsonl", stream(request(0, 1.0)))
     assert sniff(str(jl)) == "progress"
     assert sniff(os.path.join(FIX, "llama_benchy_sample.json")) == "report"
+
+
+def test_real_run_progress_matches_llama_benchy_report():
+    """Both files come from one real llama-benchy 0.4.1.dev run against its tests/mock_server.py.
+    Rebuilding the numbers from the JSONL alone must land on the report's own figures."""
+    report = load_report(os.path.join(FIX, "mock_run_report.json"))
+    progress = parse_progress(read_progress_lines(open(os.path.join(FIX, "mock_run_progress.jsonl"),
+                                                       encoding="utf-8")))
+    ours = {c.key: c for c in progress.cells}
+    assert set(ours) == {c.key for c in report.cells}
+    assert len(ours) == 12
+    for c in report.cells:
+        q = ours[c.key]
+        for m in ("ttfr_ms", "est_ppt_ms", "e2e_ttft_ms", "pp_req_tps"):
+            assert q.metrics[m]["mean"] == pytest.approx(c.metrics[m]["mean"], rel=1e-6), (c.label, m)
+        for m in ("pp_tps", "tg_tps", "tg_req_tps", "peak_tps"):
+            # token timestamps in the JSONL are taken when the event is written, a hair after
+            # the client's own clock read, so allow a small drift.
+            assert q.metrics[m]["mean"] == pytest.approx(c.metrics[m]["mean"], rel=0.02), (c.label, m)

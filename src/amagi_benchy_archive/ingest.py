@@ -27,6 +27,7 @@ REPORT_METRICS = {
     "pp_throughput": "pp_tps",
     "tg_throughput": "tg_tps",
     "peak_throughput": "peak_tps",
+    "peak_req_throughput": "peak_req_tps",
     "pp_req_throughput": "pp_req_tps",
     "tg_req_throughput": "tg_req_tps",
     "ttfr": "ttfr_ms",
@@ -147,6 +148,7 @@ class _Req:
     first_token_ts: Optional[float] = None
     ttft_s: Optional[float] = None
     chunks: List[Tuple[float, int]] = field(default_factory=list)
+    estimated: bool = False
     end_ts: Optional[float] = None
     total_tokens: int = 0
     prompt_tokens: int = 0
@@ -178,31 +180,57 @@ def read_progress_lines(lines: Iterable[str]) -> List[dict]:
     return events
 
 
-def _peak_window(chunks: List[Tuple[float, int]], window: float = 1.0) -> Optional[float]:
-    """Most tokens seen in any `window`-second span, as tokens/sec."""
-    if not chunks:
+def _peak_window(times: List[float], window: float = 1.0) -> Optional[float]:
+    """Most tokens in any `window`-second span, as tokens/sec. A burst shorter than the
+    window is rated over its own length, as llama-benchy does."""
+    if not times:
         return None
-    chunks = sorted(chunks)
+    times = sorted(times)
+    span = times[-1] - times[0]
+    if 0 < span < window:
+        return len(times) / span
     best = 0
-    total = 0
     lo = 0
-    for hi in range(len(chunks)):
-        total += chunks[hi][1]
-        while chunks[hi][0] - chunks[lo][0] > window:
-            total -= chunks[lo][1]
+    for hi, t in enumerate(times):
+        while lo < hi and times[lo] <= t - window:
             lo += 1
-        best = max(best, total)
+        best = max(best, hi - lo + 1)
     return best / window
 
 
-def _decode_tokens(r: _Req) -> Tuple[int, float]:
-    """Tokens after the first content timestamp, and the time they took."""
-    if len(r.chunks) < 2:
+def _token_times(r: "_Req") -> List[float]:
+    """One timestamp per generated token, rebuilt the way llama-benchy's client does it:
+    a chunk with exact token ids spreads its tokens back to the previous token, and
+    estimated counts are spread evenly between the first and last chunk."""
+    if not r.chunks:
+        return []
+    if not r.estimated:
+        out: List[float] = []
+        for ts, n in r.chunks:
+            if n <= 0:
+                continue
+            if n == 1:
+                out.append(ts)
+                continue
+            last = out[-1] if out else (r.first_token_ts if r.first_token_ts is not None else r.start_ts)
+            out.extend(last + (ts - last) * (i + 1) / n for i in range(n))
+        return out
+    stamps = [ts for ts, _ in r.chunks]
+    total = r.total_tokens
+    if total <= 0:
+        return stamps
+    if total == 1 or len(stamps) == 1 or stamps[-1] <= stamps[0]:
+        return [stamps[0]] * total
+    step = (stamps[-1] - stamps[0]) / (total - 1)
+    return [stamps[0] + step * i for i in range(total)]
+
+
+def _decode_tokens(times: List[float]) -> Tuple[int, float]:
+    """Tokens after the first token's timestamp, and the time they took."""
+    if len(times) < 2:
         return 0, 0.0
-    first = r.chunks[0][0]
-    last = r.chunks[-1][0]
-    after = sum(c for ts, c in r.chunks if ts > first)
-    return after, last - first
+    first = times[0]
+    return sum(1 for t in times if t > first), times[-1] - first
 
 
 def parse_progress(events: List[dict]) -> Parsed:
@@ -240,6 +268,8 @@ def parse_progress(events: List[dict]) -> Parsed:
             r = reqs.get(int(ev.get("request_id", -1)))
             if r and ts is not None:
                 r.chunks.append((float(ts), int(ev.get("count") or 0)))
+                if ev.get("estimated"):
+                    r.estimated = True
         elif t == "request_end":
             r = reqs.get(int(ev.get("request_id", -1)))
             if r:
@@ -294,7 +324,7 @@ def _cell_from_runs(pp, tg, depth, conc, phase, runs: Dict[int, List[_Req]],
     cell = Cell(pp=pp, tg=tg, depth=depth, concurrency=conc, phase=phase)
     ttfr, ppt, ttft = [], [], []
     pp_req, tg_req = [], []
-    pp_batch, tg_batch, peaks = [], [], []
+    pp_batch, tg_batch, peaks, peak_req = [], [], [], []
     starts, ends = [], []
     for _, rs in sorted(runs.items()):
         cell.requests += len(rs)
@@ -307,15 +337,14 @@ def _cell_from_runs(pp, tg, depth, conc, phase, runs: Dict[int, List[_Req]],
         if not ok:
             continue
         batch_prompt = 0
-        batch_chunks: List[Tuple[float, int]] = []
+        batch_times: List[float] = []
         first_tokens, last_tokens = [], []
-        batch_gen = 0
+        batch_decode = 0
         for r in ok:
             prompt = expected_pp
             if r.prompt_tokens > 0 and abs(r.prompt_tokens - expected_pp) < expected_pp * 0.2:
                 prompt = r.prompt_tokens
             batch_prompt += prompt
-            batch_gen += r.total_tokens
             if r.ttfr_s is not None:
                 ttfr.append(r.ttfr_s)
             if r.ttft_s is not None:
@@ -324,23 +353,32 @@ def _cell_from_runs(pp, tg, depth, conc, phase, runs: Dict[int, List[_Req]],
                 ppt.append(est)
                 if est > 0:
                     pp_req.append(prompt / est)
-            n_after, dt = _decode_tokens(r)
+            times = _token_times(r)
+            n_after, dt = _decode_tokens(times)
+            batch_decode += n_after
             if n_after > 0 and dt > 0:
                 tg_req.append(n_after / dt)
-            if r.chunks:
-                first_tokens.append(r.chunks[0][0])
-                last_tokens.append(r.chunks[-1][0])
-                cell.decode_windows.append((r.chunks[0][0], float(r.end_ts or r.chunks[-1][0])))
-            batch_chunks.extend(r.chunks)
+            first = r.first_token_ts if r.first_token_ts is not None else (times[0] if times else None)
+            if first is not None:
+                first_tokens.append(float(first))
+            if times:
+                last_tokens.append(times[-1])
+                cell.decode_windows.append((times[0], float(r.end_ts or times[-1])))
+            elif r.end_ts is not None:
+                last_tokens.append(float(r.end_ts))
+            batch_times.extend(times)
+            req_peak = _peak_window(times)
+            if req_peak:
+                peak_req.append(req_peak)
         if conc > 1 and first_tokens:
             t0 = min(r.start_ts for r in ok)
             pp_dur = max(first_tokens) - t0
             if pp_dur > 0:
                 pp_batch.append(batch_prompt / pp_dur)
-            tg_dur = max(last_tokens) - min(first_tokens)
-            if tg_dur > 0:
-                tg_batch.append(batch_gen / tg_dur)
-        peak = _peak_window(batch_chunks)
+            tg_dur = max(last_tokens) - min(first_tokens) if last_tokens else 0
+            if tg_dur > 0 and batch_decode > 0:
+                tg_batch.append(batch_decode / tg_dur)
+        peak = _peak_window(batch_times)
         if peak:
             peaks.append(peak)
     cell.start_ts = min(starts) if starts else None
@@ -351,6 +389,7 @@ def _cell_from_runs(pp, tg, depth, conc, phase, runs: Dict[int, List[_Req]],
     m["pp_tps"] = summarize(pp_batch) if conc > 1 else m["pp_req_tps"]
     m["tg_tps"] = summarize(tg_batch) if conc > 1 else m["tg_req_tps"]
     m["peak_tps"] = summarize(peaks)
+    m["peak_req_tps"] = summarize(peak_req)
     m["ttfr_ms"] = summarize(ttfr, 1000.0)
     m["est_ppt_ms"] = summarize(ppt, 1000.0)
     m["e2e_ttft_ms"] = summarize(ttft, 1000.0)
