@@ -1,0 +1,149 @@
+{
+  "schema": "amagi-benchy-archive.run.v1",
+  "run_id": "100807da987a",
+  "machine": "laptop",
+  "gpu": "none (llama-benchy mock server)",
+  "engine": "llama-benchy mock_server",
+  "quant": "",
+  "model": "mock-model",
+  "tag": "second",
+  "note": "",
+  "started": "2026-10-25T06:55:01Z",
+  "ended": "2026-10-25T06:55:19Z",
+  "status": "ok",
+  "llama_benchy_version": "0.4.1.dev1+ge9be34457",
+  "latency_mode": "api",
+  "latency_ms": 6.900166665824751,
+  "sources": {
+    "report": "report.json",
+    "progress": "progress.jsonl"
+  },
+  "archived_by": "amagi-benchy-archive 0.1.0",
+  "power": null,
+  "cells": [
+    {
+      "pp": 512,
+      "tg": 32,
+      "depth": 0,
+      "concurrency": 1,
+      "phase": "std",
+      "label": "pp512/tg32",
+      "metrics": {
+        "e2e_ttft_ms": {
+          "mean": 572.1187,
+          "std": 19.3022,
+          "n": 3
+        },
+        "est_ppt_ms": {
+          "mean": 565.2186,
+          "std": 19.3022,
+          "n": 3
+        },
+        "peak_req_tps": {
+          "mean": 51.3716,
+          "std": 0.9831,
+          "n": 3
+        },
+        "peak_tps": {
+          "mean": 51.3716,
+          "std": 0.9831,
+          "n": 3
+        },
+        "pp_req_tps": {
+          "mean": 906.8815,
+          "std": 30.3748,
+          "n": 3
+        },
+        "pp_tps": {
+          "mean": 906.8815,
+          "std": 30.3748,
+          "n": 3
+        },
+        "tg_req_tps": {
+          "mean": 49.7662,
+          "std": 0.9524,
+          "n": 3
+        },
+        "tg_tps": {
+          "mean": 49.7662,
+          "std": 0.9524,
+          "n": 3
+        },
+        "ttfr_ms": {
+          "mean": 572.1187,
+          "std": 19.3022,
+          "n": 3
+        }
+      },
+      "start": "2026-10-25T06:55:05Z",
+      "end": "2026-10-25T06:55:09Z",
+      "requests": 3,
+      "errors": 0,
+      "power": null,
+      "decode_power": null,
+      "tok_per_j": null
+    },
+    {
+      "pp": 2048,
+      "tg": 32,
+      "depth": 0,
+      "concurrency": 1,
+      "phase": "std",
+      "label": "pp2048/tg32",
+      "metrics": {
+        "e2e_ttft_ms": {
+          "mean": 2098.3606,
+          "std": 10.8728,
+          "n": 3
+        },
+        "est_ppt_ms": {
+          "mean": 2091.4604,
+          "std": 10.8728,
+          "n": 3
+        },
+        "peak_req_tps": {
+          "mean": 52.4543,
+          "std": 0.5352,
+          "n": 3
+        },
+        "peak_tps": {
+          "mean": 52.4543,
+          "std": 0.5352,
+          "n": 3
+        },
+        "pp_req_tps": {
+          "mean": 979.2466,
+          "std": 5.0957,
+          "n": 3
+        },
+        "pp_tps": {
+          "mean": 979.2466,
+          "std": 5.0957,
+          "n": 3
+        },
+        "tg_req_tps": {
+          "mean": 50.8151,
+          "std": 0.5185,
+          "n": 3
+        },
+        "tg_tps": {
+          "mean": 50.8151,
+          "std": 0.5185,
+          "n": 3
+        },
+        "ttfr_ms": {
+          "mean": 2098.3606,
+          "std": 10.8728,
+          "n": 3
+        }
+      },
+      "start": "2026-10-25T06:55:11Z",
+      "end": "2026-10-25T06:55:19Z",
+      "requests": 3,
+      "errors": 0,
+      "power": null,
+      "decode_power": null,
+      "tok_per_j": null
+    }
+  ]
+}

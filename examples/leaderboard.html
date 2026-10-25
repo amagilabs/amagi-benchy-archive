@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Example archive: two llama-benchy runs against its mock server</title>
+<meta name="generator" content="amagi-benchy-archive 0.1.0">
+<style>
+.viz-root{color-scheme:light;--surface-1:#fcfcfb;--surface-2:#f3f2ef;--grid:#e4e3df;
+--text-primary:#0b0b0b;--text-secondary:#52514e;--text-muted:#7a7975;--series-1:#2a78d6;
+--bad:#c62828;--good:#1b7f3b}
+@media (prefers-color-scheme:dark){:root:where(:not([data-theme="light"])) .viz-root{color-scheme:dark;
+--surface-1:#1a1a19;--surface-2:#242422;--grid:#383835;--text-primary:#ffffff;--text-secondary:#c3c2b7;
+--text-muted:#9a998f;--series-1:#3987e5;--bad:#ff6b6b;--good:#5cd68a}}
+:root[data-theme="dark"] .viz-root{color-scheme:dark;--surface-1:#1a1a19;--surface-2:#242422;--grid:#383835;
+--text-primary:#ffffff;--text-secondary:#c3c2b7;--text-muted:#9a998f;--series-1:#3987e5;--bad:#ff6b6b;--good:#5cd68a}
+*{box-sizing:border-box}
+body{margin:0}
+.viz-root{background:var(--surface-1);color:var(--text-primary);min-height:100vh;
+font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:32px 20px 48px}
+main{max-width:980px;margin:0 auto}
+h1{font-size:26px;margin:0 0 4px;letter-spacing:-.01em}
+h2{font-size:18px;margin:40px 0 4px}
+p.sub,p.note{color:var(--text-secondary);margin:0 0 12px}
+p.note{font-size:13px}
+table{border-collapse:collapse;width:100%;font-size:13px;margin:8px 0 0}
+th,td{padding:6px 8px;border-bottom:1px solid var(--grid);text-align:left;white-space:nowrap}
+th{color:var(--text-secondary);font-weight:600}
+td.r,th.r{text-align:right;font-variant-numeric:tabular-nums}
+.scroll{overflow-x:auto}
+svg{display:block;max-width:100%;height:auto}
+svg text{fill:var(--text-primary);font:12px system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+svg text.muted{fill:var(--text-secondary)}
+svg .bar{fill:var(--series-1)}
+svg .grid{stroke:var(--grid);stroke-width:1}
+svg .line{stroke:var(--series-1);stroke-width:2;fill:none;stroke-linejoin:round;stroke-linecap:round}
+svg .dot{fill:var(--series-1);stroke:var(--surface-1);stroke-width:2}
+.tag{display:inline-block;font-size:12px;font-weight:600;padding:1px 6px;border-radius:4px;border:1px solid currentColor}
+.worse{color:var(--bad)} .better{color:var(--good)}
+.multiples{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-top:8px}
+.card{background:var(--surface-2);border-radius:8px;padding:12px}
+.card h3{font-size:13px;margin:0 0 6px;font-weight:600}
+details{background:var(--surface-2);border-radius:8px;padding:8px 12px;margin:8px 0}
+summary{cursor:pointer;font-size:14px}
+footer{margin-top:48px;color:var(--text-muted);font-size:12px}
+footer a{color:var(--text-secondary)}
+</style></head><body><div class="viz-root"><main>
+<h1>Example archive: two llama-benchy runs against its mock server</h1>
+<p class="sub">Test pp512/tg32: a 512-token prompt, 32 generated tokens, no prior context, one request at a time. 2 runs from 1 machine, measured with llama-benchy.</p>
+<h2>Generation speed</h2>
+<p class="note">Tokens per second while the answer streams, latest run of each setup. Hover a bar for the full row.</p>
+<svg viewBox="0 0 950 56" role="img" aria-label="gen t/s by setup"><line class="grid" x1="300.0" y1="0" x2="300.0" y2="36"/><text class="muted" x="300.0" y="52" text-anchor="middle">0</text><line class="grid" x1="412.0" y1="0" x2="412.0" y2="36"/><text class="muted" x="412.0" y="52" text-anchor="middle">10</text><line class="grid" x1="524.0" y1="0" x2="524.0" y2="36"/><text class="muted" x="524.0" y="52" text-anchor="middle">20</text><line class="grid" x1="636.0" y1="0" x2="636.0" y2="36"/><text class="muted" x="636.0" y="52" text-anchor="middle">30</text><line class="grid" x1="748.0" y1="0" x2="748.0" y2="36"/><text class="muted" x="748.0" y="52" text-anchor="middle">40</text><line class="grid" x1="860.0" y1="0" x2="860.0" y2="36"/><text class="muted" x="860.0" y="52" text-anchor="middle">50</text><g><title>mock-model on laptop (llama-benchy mock_server) · none (llama-benchy mock server) · gen 49.8 t/s · prompt 907 t/s · TTFT 572 ms · run 100807da · 2026-10-25</title><rect x="0" y="0" width="950" height="32" fill="transparent"/><text x="290" y="18" text-anchor="end">mock-model · laptop</text><path class="bar" d="M300,4 H853.4 Q857.4,4 857.4,8.0 V20.0 Q857.4,24 853.4,24 H300 Z"/><text x="863.4" y="18">49.8</text></g></svg>
+<h2>Table</h2>
+<div class="scroll"><table><thead><tr><th class="r">#</th><th>model</th><th>machine</th><th>gpu</th><th class="r">gen t/s</th><th class="r">prompt t/s</th><th class="r">TTFT ms</th><th class="r">watts</th><th class="r">tok/J</th><th>date</th><th>run</th></tr></thead><tbody><tr><td class="r">1</td><td>mock-model</td><td>laptop</td><td>none (llama-benchy mock server)</td><td class="r">49.8 ±1.0</td><td class="r">907</td><td class="r">572</td><td class="r">-</td><td class="r">-</td><td>2026-10-25</td><td>100807da</td></tr></tbody></table></div>
+<h2>Regressions</h2>
+<p class="note">The latest run of each setup against the run before it, every test it shares. A change is listed when it is at least 5% and bigger than the two runs' combined standard deviation.</p>
+<div class="scroll"><table><thead><tr><th></th><th>setup</th><th>test</th><th>metric</th><th class="r">before</th><th class="r">after</th><th class="r">change</th><th class="r">noise</th><th>runs</th></tr></thead><tbody><tr><td><span class="tag better">better</span></td><td>mock-model on laptop (llama-benchy mock_server)</td><td>pp512/tg32</td><td>TTFT ms</td><td class="r">604.2</td><td class="r">572.1</td><td class="r">-5.3%</td><td class="r">23.1</td><td>2b85376f-&gt;100807da</td></tr></tbody></table></div>
+<h2>History</h2>
+<p class="note">Generation speed on pp512/tg32 for every setup with more than one run, oldest to newest.</p>
+<div class="multiples">
+<div class="card"><h3>mock-model on laptop (llama-benchy mock_server)</h3><svg width="280" height="100" viewBox="0 0 280 100" role="img" aria-label="gen t/s over 2 runs"><line class="grid" x1="6" y1="80" x2="224" y2="80"/><path class="line" d="M6.0,20.0 L224.0,80.0"/><g><title>2026-10-25T06:46 · 51.7 gen t/s · run 2b85376f</title><circle cx="6.0" cy="20.0" r="9" fill="transparent"/><circle class="dot" cx="6.0" cy="20.0" r="4"/></g><g><title>2026-10-25T06:55 · 49.8 gen t/s · run 100807da</title><circle cx="224.0" cy="80.0" r="9" fill="transparent"/><circle class="dot" cx="224.0" cy="80.0" r="4"/></g><text class="muted" x="6.0" y="12.0">51.7</text><text x="232.0" y="84.0">49.8</text><text class="muted" x="6" y="99">2026-10-25</text></svg></div>
+</div>
+<h2>All runs</h2>
+<details><summary>2026-10-25 06:55 · mock-model on laptop (llama-benchy mock_server) · none (llama-benchy mock server) · second <code>100807da</code></summary>
+<div class="scroll"><table><thead><tr><th>test</th><th class="r">gen t/s</th><th class="r">prompt t/s</th><th class="r">peak t/s</th><th class="r">TTFT ms</th><th class="r">watts</th><th class="r">peak W</th><th class="r">tok/J</th><th class="r">reqs</th><th class="r">errors</th></tr></thead><tbody><tr><td>pp512/tg32</td><td class="r">49.8</td><td class="r">907</td><td class="r">51.4</td><td class="r">572</td><td class="r">-</td><td class="r">-</td><td class="r">-</td><td class="r">3</td><td class="r">0</td></tr><tr><td>pp2048/tg32</td><td class="r">50.8</td><td class="r">979</td><td class="r">52.5</td><td class="r">2,098</td><td class="r">-</td><td class="r">-</td><td class="r">-</td><td class="r">3</td><td class="r">0</td></tr></tbody></table></div>
+</details>
+<details><summary>2026-10-25 06:46 · mock-model on laptop (llama-benchy mock_server) · none (llama-benchy mock server) · first <code>2b85376f</code></summary>
+<div class="scroll"><table><thead><tr><th>test</th><th class="r">gen t/s</th><th class="r">prompt t/s</th><th class="r">peak t/s</th><th class="r">TTFT ms</th><th class="r">watts</th><th class="r">peak W</th><th class="r">tok/J</th><th class="r">reqs</th><th class="r">errors</th></tr></thead><tbody><tr><td>pp512/tg32</td><td class="r">51.7</td><td class="r">948</td><td class="r">53.3</td><td class="r">604</td><td class="r">-</td><td class="r">-</td><td class="r">-</td><td class="r">3</td><td class="r">0</td></tr><tr><td>pp512/tg32 c2</td><td class="r">92.8</td><td class="r">1,299</td><td class="r">95.8</td><td class="r">761</td><td class="r">-</td><td class="r">-</td><td class="r">-</td><td class="r">6</td><td class="r">0</td></tr><tr><td>pp2048/tg32</td><td class="r">51.4</td><td class="r">972</td><td class="r">53.0</td><td class="r">2,173</td><td class="r">-</td><td class="r">-</td><td class="r">-</td><td class="r">3</td><td class="r">0</td></tr><tr><td>pp2048/tg32 c2</td><td class="r">89.7</td><td class="r">1,857</td><td class="r">92.6</td><td class="r">2,167</td><td class="r">-</td><td class="r">-</td><td class="r">-</td><td class="r">6</td><td class="r">0</td></tr><tr><td>pp512/tg32 @ d1024 [ctx]</td><td class="r">51.6</td><td class="r">944</td><td class="r">53.2</td><td class="r">1,150</td><td class="r">-</td><td class="r">-</td><td class="r">-</td><td class="r">3</td><td class="r">0</td></tr><tr><td>pp512/tg32 @ d1024</td><td class="r">53.9</td><td class="r">905</td><td class="r">55.6</td><td class="r">630</td><td class="r">-</td><td class="r">-</td><td class="r">-</td><td class="r">3</td><td class="r">0</td></tr><tr><td>pp512/tg32 @ d1024 c2 [ctx]</td><td class="r">97.0</td><td class="r">1,848</td><td class="r">101.2</td><td class="r">1,103</td><td class="r">-</td><td class="r">-</td><td class="r">-</td><td class="r">6</td><td class="r">0</td></tr><tr><td>pp512/tg32 @ d1024 c2</td><td class="r">95.1</td><td class="r">1,525</td><td class="r">98.1</td><td class="r">641</td><td class="r">-</td><td class="r">-</td><td class="r">-</td><td class="r">6</td><td class="r">0</td></tr><tr><td>pp2048/tg32 @ d1024 [ctx]</td><td class="r">50.0</td><td class="r">1,002</td><td class="r">51.6</td><td class="r">1,087</td><td class="r">-</td><td class="r">-</td><td class="r">-</td><td class="r">3</td><td class="r">0</td></tr><tr><td>pp2048/tg32 @ d1024</td><td class="r">51.1</td><td class="r">995</td><td class="r">52.7</td><td class="r">2,123</td><td class="r">-</td><td class="r">-</td><td class="r">-</td><td class="r">3</td><td class="r">0</td></tr><tr><td>pp2048/tg32 @ d1024 c2 [ctx]</td><td class="r">99.0</td><td class="r">1,747</td><td class="r">102.2</td><td class="r">1,164</td><td class="r">-</td><td class="r">-</td><td class="r">-</td><td class="r">6</td><td class="r">0</td></tr><tr><td>pp2048/tg32 @ d1024 c2</td><td class="r">79.2</td><td class="r">1,825</td><td class="r">83.4</td><td class="r">2,194</td><td class="r">-</td><td class="r">-</td><td class="r">-</td><td class="r">6</td><td class="r">0</td></tr></tbody></table></div>
+</details>
+<footer><p>Generated 2026-10-25 07:05 UTC by <a href="https://github.com/amagilabs/amagi-benchy-archive">amagi-benchy-archive</a> 0.1.0. Built on <a href="https://github.com/eugr/llama-benchy">llama-benchy</a> by eugr (MIT) and llama-benchy-viz by Alex Ziskind (MIT) (<a href="https://github.com/alexziskind1/llama-benchy-viz-tui">TUI</a>, <a href="https://github.com/alexziskind1/llama-benchy-viz-web">web</a>).</p></footer>
+</main></div></body></html>

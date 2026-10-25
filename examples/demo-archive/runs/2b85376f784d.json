@@ -1,0 +1,769 @@
+{
+  "schema": "amagi-benchy-archive.run.v1",
+  "run_id": "2b85376f784d",
+  "machine": "laptop",
+  "gpu": "none (llama-benchy mock server)",
+  "engine": "llama-benchy mock_server",
+  "quant": "",
+  "model": "mock-model",
+  "tag": "first",
+  "note": "",
+  "started": "2026-10-25T06:46:41Z",
+  "ended": "2026-10-25T06:48:20Z",
+  "status": "ok",
+  "llama_benchy_version": "0.4.1.dev1+ge9be34457",
+  "latency_mode": "api",
+  "latency_ms": 63.92746665126954,
+  "sources": {
+    "report": "report.json",
+    "progress": "progress.jsonl"
+  },
+  "archived_by": "amagi-benchy-archive 0.1.0",
+  "power": null,
+  "cells": [
+    {
+      "pp": 512,
+      "tg": 32,
+      "depth": 0,
+      "concurrency": 1,
+      "phase": "std",
+      "label": "pp512/tg32",
+      "metrics": {
+        "e2e_ttft_ms": {
+          "mean": 604.2385,
+          "std": 12.6509,
+          "n": 3
+        },
+        "est_ppt_ms": {
+          "mean": 540.311,
+          "std": 12.6509,
+          "n": 3
+        },
+        "peak_req_tps": {
+          "mean": 53.333,
+          "std": 2.2992,
+          "n": 3
+        },
+        "peak_tps": {
+          "mean": 53.333,
+          "std": 2.2992,
+          "n": 3
+        },
+        "pp_req_tps": {
+          "mean": 948.1277,
+          "std": 22.4362,
+          "n": 3
+        },
+        "pp_tps": {
+          "mean": 948.1277,
+          "std": 22.4362,
+          "n": 3
+        },
+        "tg_req_tps": {
+          "mean": 51.6664,
+          "std": 2.2274,
+          "n": 3
+        },
+        "tg_tps": {
+          "mean": 51.6664,
+          "std": 2.2274,
+          "n": 3
+        },
+        "ttfr_ms": {
+          "mean": 604.2385,
+          "std": 12.6509,
+          "n": 3
+        }
+      },
+      "start": "2026-10-25T06:46:47Z",
+      "end": "2026-10-25T06:46:51Z",
+      "requests": 3,
+      "errors": 0,
+      "power": null,
+      "decode_power": null,
+      "tok_per_j": null
+    },
+    {
+      "pp": 512,
+      "tg": 32,
+      "depth": 0,
+      "concurrency": 2,
+      "phase": "std",
+      "label": "pp512/tg32 c2",
+      "metrics": {
+        "e2e_ttft_ms": {
+          "mean": 760.6184,
+          "std": 106.7673,
+          "n": 6
+        },
+        "est_ppt_ms": {
+          "mean": 696.691,
+          "std": 106.7673,
+          "n": 6
+        },
+        "peak_req_tps": {
+          "mean": 54.3594,
+          "std": 4.5685,
+          "n": 6
+        },
+        "peak_tps": {
+          "mean": 95.7815,
+          "std": 2.7493,
+          "n": 3
+        },
+        "pp_req_tps": {
+          "mean": 755.2172,
+          "std": 133.7749,
+          "n": 6
+        },
+        "pp_tps": {
+          "mean": 1299.1316,
+          "std": 148.1078,
+          "n": 3
+        },
+        "tg_req_tps": {
+          "mean": 52.6607,
+          "std": 4.4258,
+          "n": 6
+        },
+        "tg_tps": {
+          "mean": 92.7883,
+          "std": 2.6633,
+          "n": 3
+        },
+        "ttfr_ms": {
+          "mean": 760.6184,
+          "std": 106.7673,
+          "n": 6
+        }
+      },
+      "start": "2026-10-25T06:46:52Z",
+      "end": "2026-10-25T06:46:57Z",
+      "requests": 6,
+      "errors": 0,
+      "power": null,
+      "decode_power": null,
+      "tok_per_j": null
+    },
+    {
+      "pp": 2048,
+      "tg": 32,
+      "depth": 0,
+      "concurrency": 1,
+      "phase": "std",
+      "label": "pp2048/tg32",
+      "metrics": {
+        "e2e_ttft_ms": {
+          "mean": 2173.4145,
+          "std": 58.9963,
+          "n": 3
+        },
+        "est_ppt_ms": {
+          "mean": 2109.4871,
+          "std": 58.9963,
+          "n": 3
+        },
+        "peak_req_tps": {
+          "mean": 53.0433,
+          "std": 1.5079,
+          "n": 3
+        },
+        "peak_tps": {
+          "mean": 53.0433,
+          "std": 1.5079,
+          "n": 3
+        },
+        "pp_req_tps": {
+          "mean": 971.5974,
+          "std": 26.6467,
+          "n": 3
+        },
+        "pp_tps": {
+          "mean": 971.5974,
+          "std": 26.6467,
+          "n": 3
+        },
+        "tg_req_tps": {
+          "mean": 51.3857,
+          "std": 1.4608,
+          "n": 3
+        },
+        "tg_tps": {
+          "mean": 51.3857,
+          "std": 1.4608,
+          "n": 3
+        },
+        "ttfr_ms": {
+          "mean": 2173.4145,
+          "std": 58.9963,
+          "n": 3
+        }
+      },
+      "start": "2026-10-25T06:46:59Z",
+      "end": "2026-10-25T06:47:08Z",
+      "requests": 3,
+      "errors": 0,
+      "power": null,
+      "decode_power": null,
+      "tok_per_j": null
+    },
+    {
+      "pp": 2048,
+      "tg": 32,
+      "depth": 0,
+      "concurrency": 2,
+      "phase": "std",
+      "label": "pp2048/tg32 c2",
+      "metrics": {
+        "e2e_ttft_ms": {
+          "mean": 2166.6484,
+          "std": 62.0619,
+          "n": 6
+        },
+        "est_ppt_ms": {
+          "mean": 2102.7209,
+          "std": 62.0619,
+          "n": 6
+        },
+        "peak_req_tps": {
+          "mean": 50.2754,
+          "std": 3.9578,
+          "n": 6
+        },
+        "peak_tps": {
+          "mean": 92.5814,
+          "std": 6.2716,
+          "n": 3
+        },
+        "pp_req_tps": {
+          "mean": 974.7952,
+          "std": 27.7559,
+          "n": 6
+        },
+        "pp_tps": {
+          "mean": 1856.8502,
+          "std": 54.3626,
+          "n": 3
+        },
+        "tg_req_tps": {
+          "mean": 48.7043,
+          "std": 3.8341,
+          "n": 6
+        },
+        "tg_tps": {
+          "mean": 89.6882,
+          "std": 6.0756,
+          "n": 3
+        },
+        "ttfr_ms": {
+          "mean": 2166.6484,
+          "std": 62.0619,
+          "n": 6
+        }
+      },
+      "start": "2026-10-25T06:47:11Z",
+      "end": "2026-10-25T06:47:19Z",
+      "requests": 6,
+      "errors": 0,
+      "power": null,
+      "decode_power": null,
+      "tok_per_j": null
+    },
+    {
+      "pp": 512,
+      "tg": 32,
+      "depth": 1024,
+      "concurrency": 1,
+      "phase": "ctx",
+      "label": "pp512/tg32 @ d1024 [ctx]",
+      "metrics": {
+        "e2e_ttft_ms": {
+          "mean": 1149.6167,
+          "std": 10.9746,
+          "n": 3
+        },
+        "est_ppt_ms": {
+          "mean": 1085.6892,
+          "std": 10.9746,
+          "n": 3
+        },
+        "peak_req_tps": {
+          "mean": 53.2447,
+          "std": 0.8814,
+          "n": 3
+        },
+        "peak_tps": {
+          "mean": 53.2447,
+          "std": 0.8814,
+          "n": 3
+        },
+        "pp_req_tps": {
+          "mean": 944.1967,
+          "std": 9.4909,
+          "n": 3
+        },
+        "pp_tps": {
+          "mean": 944.1967,
+          "std": 9.4909,
+          "n": 3
+        },
+        "tg_req_tps": {
+          "mean": 51.5808,
+          "std": 0.8538,
+          "n": 3
+        },
+        "tg_tps": {
+          "mean": 51.5808,
+          "std": 0.8538,
+          "n": 3
+        },
+        "ttfr_ms": {
+          "mean": 1149.6167,
+          "std": 10.9746,
+          "n": 3
+        }
+      },
+      "start": "2026-10-25T06:47:22Z",
+      "end": "2026-10-25T06:47:30Z",
+      "requests": 3,
+      "errors": 0,
+      "power": null,
+      "decode_power": null,
+      "tok_per_j": null
+    },
+    {
+      "pp": 512,
+      "tg": 32,
+      "depth": 1024,
+      "concurrency": 1,
+      "phase": "std",
+      "label": "pp512/tg32 @ d1024",
+      "metrics": {
+        "e2e_ttft_ms": {
+          "mean": 630.3726,
+          "std": 16.8643,
+          "n": 3
+        },
+        "est_ppt_ms": {
+          "mean": 566.4452,
+          "std": 16.8643,
+          "n": 3
+        },
+        "peak_req_tps": {
+          "mean": 55.6403,
+          "std": 0.6607,
+          "n": 3
+        },
+        "peak_tps": {
+          "mean": 55.6403,
+          "std": 0.6607,
+          "n": 3
+        },
+        "pp_req_tps": {
+          "mean": 904.6698,
+          "std": 26.4366,
+          "n": 3
+        },
+        "pp_tps": {
+          "mean": 904.6698,
+          "std": 26.4366,
+          "n": 3
+        },
+        "tg_req_tps": {
+          "mean": 53.9015,
+          "std": 0.64,
+          "n": 3
+        },
+        "tg_tps": {
+          "mean": 53.9015,
+          "std": 0.64,
+          "n": 3
+        },
+        "ttfr_ms": {
+          "mean": 630.3726,
+          "std": 16.8643,
+          "n": 3
+        }
+      },
+      "start": "2026-10-25T06:47:24Z",
+      "end": "2026-10-25T06:47:31Z",
+      "requests": 3,
+      "errors": 0,
+      "power": null,
+      "decode_power": null,
+      "tok_per_j": null
+    },
+    {
+      "pp": 512,
+      "tg": 32,
+      "depth": 1024,
+      "concurrency": 2,
+      "phase": "ctx",
+      "label": "pp512/tg32 @ d1024 c2 [ctx]",
+      "metrics": {
+        "e2e_ttft_ms": {
+          "mean": 1102.594,
+          "std": 13.6184,
+          "n": 6
+        },
+        "est_ppt_ms": {
+          "mean": 1038.6666,
+          "std": 13.6184,
+          "n": 6
+        },
+        "peak_req_tps": {
+          "mean": 52.1517,
+          "std": 0.857,
+          "n": 6
+        },
+        "peak_tps": {
+          "mean": 101.2166,
+          "std": 4.4536,
+          "n": 3
+        },
+        "pp_req_tps": {
+          "mean": 987.0082,
+          "std": 12.6622,
+          "n": 6
+        },
+        "pp_tps": {
+          "mean": 1848.0457,
+          "std": 27.0171,
+          "n": 3
+        },
+        "tg_req_tps": {
+          "mean": 49.9782,
+          "std": 1.1106,
+          "n": 6
+        },
+        "tg_tps": {
+          "mean": 96.9666,
+          "std": 3.5484,
+          "n": 3
+        },
+        "ttfr_ms": {
+          "mean": 1102.594,
+          "std": 13.6184,
+          "n": 6
+        }
+      },
+      "start": "2026-10-25T06:47:34Z",
+      "end": "2026-10-25T06:47:42Z",
+      "requests": 6,
+      "errors": 0,
+      "power": null,
+      "decode_power": null,
+      "tok_per_j": null
+    },
+    {
+      "pp": 512,
+      "tg": 32,
+      "depth": 1024,
+      "concurrency": 2,
+      "phase": "std",
+      "label": "pp512/tg32 @ d1024 c2",
+      "metrics": {
+        "e2e_ttft_ms": {
+          "mean": 640.6117,
+          "std": 47.586,
+          "n": 6
+        },
+        "est_ppt_ms": {
+          "mean": 576.6842,
+          "std": 47.586,
+          "n": 6
+        },
+        "peak_req_tps": {
+          "mean": 52.643,
+          "std": 2.6674,
+          "n": 6
+        },
+        "peak_tps": {
+          "mean": 98.1239,
+          "std": 10.8021,
+          "n": 3
+        },
+        "pp_req_tps": {
+          "mean": 893.5217,
+          "std": 69.1103,
+          "n": 6
+        },
+        "pp_tps": {
+          "mean": 1525.128,
+          "std": 100.762,
+          "n": 3
+        },
+        "tg_req_tps": {
+          "mean": 50.9979,
+          "std": 2.584,
+          "n": 6
+        },
+        "tg_tps": {
+          "mean": 95.0576,
+          "std": 10.4646,
+          "n": 3
+        },
+        "ttfr_ms": {
+          "mean": 640.6117,
+          "std": 47.586,
+          "n": 6
+        }
+      },
+      "start": "2026-10-25T06:47:36Z",
+      "end": "2026-10-25T06:47:43Z",
+      "requests": 6,
+      "errors": 0,
+      "power": null,
+      "decode_power": null,
+      "tok_per_j": null
+    },
+    {
+      "pp": 2048,
+      "tg": 32,
+      "depth": 1024,
+      "concurrency": 1,
+      "phase": "ctx",
+      "label": "pp2048/tg32 @ d1024 [ctx]",
+      "metrics": {
+        "e2e_ttft_ms": {
+          "mean": 1086.6271,
+          "std": 7.4081,
+          "n": 3
+        },
+        "est_ppt_ms": {
+          "mean": 1022.6996,
+          "std": 7.4081,
+          "n": 3
+        },
+        "peak_req_tps": {
+          "mean": 51.6469,
+          "std": 1.0874,
+          "n": 3
+        },
+        "peak_tps": {
+          "mean": 51.6469,
+          "std": 1.0874,
+          "n": 3
+        },
+        "pp_req_tps": {
+          "mean": 1002.3018,
+          "std": 7.2429,
+          "n": 3
+        },
+        "pp_tps": {
+          "mean": 1002.3018,
+          "std": 7.2429,
+          "n": 3
+        },
+        "tg_req_tps": {
+          "mean": 50.033,
+          "std": 1.0534,
+          "n": 3
+        },
+        "tg_tps": {
+          "mean": 50.033,
+          "std": 1.0534,
+          "n": 3
+        },
+        "ttfr_ms": {
+          "mean": 1086.6271,
+          "std": 7.4081,
+          "n": 3
+        }
+      },
+      "start": "2026-10-25T06:47:48Z",
+      "end": "2026-10-25T06:47:58Z",
+      "requests": 3,
+      "errors": 0,
+      "power": null,
+      "decode_power": null,
+      "tok_per_j": null
+    },
+    {
+      "pp": 2048,
+      "tg": 32,
+      "depth": 1024,
+      "concurrency": 1,
+      "phase": "std",
+      "label": "pp2048/tg32 @ d1024",
+      "metrics": {
+        "e2e_ttft_ms": {
+          "mean": 2123.003,
+          "std": 11.4649,
+          "n": 3
+        },
+        "est_ppt_ms": {
+          "mean": 2059.0756,
+          "std": 11.4649,
+          "n": 3
+        },
+        "peak_req_tps": {
+          "mean": 52.6973,
+          "std": 1.2814,
+          "n": 3
+        },
+        "peak_tps": {
+          "mean": 52.6973,
+          "std": 1.2814,
+          "n": 3
+        },
+        "pp_req_tps": {
+          "mean": 994.652,
+          "std": 5.5557,
+          "n": 3
+        },
+        "pp_tps": {
+          "mean": 994.652,
+          "std": 5.5557,
+          "n": 3
+        },
+        "tg_req_tps": {
+          "mean": 51.0505,
+          "std": 1.2413,
+          "n": 3
+        },
+        "tg_tps": {
+          "mean": 51.0505,
+          "std": 1.2413,
+          "n": 3
+        },
+        "ttfr_ms": {
+          "mean": 2123.003,
+          "std": 11.4649,
+          "n": 3
+        }
+      },
+      "start": "2026-10-25T06:47:49Z",
+      "end": "2026-10-25T06:48:01Z",
+      "requests": 3,
+      "errors": 0,
+      "power": null,
+      "decode_power": null,
+      "tok_per_j": null
+    },
+    {
+      "pp": 2048,
+      "tg": 32,
+      "depth": 1024,
+      "concurrency": 2,
+      "phase": "ctx",
+      "label": "pp2048/tg32 @ d1024 c2 [ctx]",
+      "metrics": {
+        "e2e_ttft_ms": {
+          "mean": 1163.8335,
+          "std": 58.7207,
+          "n": 6
+        },
+        "est_ppt_ms": {
+          "mean": 1099.906,
+          "std": 58.7207,
+          "n": 6
+        },
+        "peak_req_tps": {
+          "mean": 53.1119,
+          "std": 3.222,
+          "n": 6
+        },
+        "peak_tps": {
+          "mean": 102.1876,
+          "std": 8.6327,
+          "n": 3
+        },
+        "pp_req_tps": {
+          "mean": 934.5284,
+          "std": 49.288,
+          "n": 6
+        },
+        "pp_tps": {
+          "mean": 1747.3482,
+          "std": 81.2598,
+          "n": 3
+        },
+        "tg_req_tps": {
+          "mean": 51.4522,
+          "std": 3.1213,
+          "n": 6
+        },
+        "tg_tps": {
+          "mean": 98.9942,
+          "std": 8.3629,
+          "n": 3
+        },
+        "ttfr_ms": {
+          "mean": 1163.8335,
+          "std": 58.7207,
+          "n": 6
+        }
+      },
+      "start": "2026-10-25T06:48:06Z",
+      "end": "2026-10-25T06:48:17Z",
+      "requests": 6,
+      "errors": 0,
+      "power": null,
+      "decode_power": null,
+      "tok_per_j": null
+    },
+    {
+      "pp": 2048,
+      "tg": 32,
+      "depth": 1024,
+      "concurrency": 2,
+      "phase": "std",
+      "label": "pp2048/tg32 @ d1024 c2",
+      "metrics": {
+        "e2e_ttft_ms": {
+          "mean": 2194.0292,
+          "std": 121.8297,
+          "n": 6
+        },
+        "est_ppt_ms": {
+          "mean": 2130.1018,
+          "std": 121.8297,
+          "n": 6
+        },
+        "peak_req_tps": {
+          "mean": 47.6085,
+          "std": 5.5242,
+          "n": 6
+        },
+        "peak_tps": {
+          "mean": 83.3756,
+          "std": 17.9468,
+          "n": 3
+        },
+        "pp_req_tps": {
+          "mean": 964.3303,
+          "std": 50.2593,
+          "n": 6
+        },
+        "pp_tps": {
+          "mean": 1825.1438,
+          "std": 115.7675,
+          "n": 3
+        },
+        "tg_req_tps": {
+          "mean": 46.1207,
+          "std": 5.3515,
+          "n": 6
+        },
+        "tg_tps": {
+          "mean": 79.247,
+          "std": 19.5397,
+          "n": 3
+        },
+        "ttfr_ms": {
+          "mean": 2194.0292,
+          "std": 121.8297,
+          "n": 6
+        }
+      },
+      "start": "2026-10-25T06:48:07Z",
+      "end": "2026-10-25T06:48:20Z",
+      "requests": 6,
+      "errors": 0,
+      "power": null,
+      "decode_power": null,
+      "tok_per_j": null
+    }
+  ]
+}

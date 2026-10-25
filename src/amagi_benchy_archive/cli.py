@@ -167,7 +167,7 @@ def _finish_ingest(args, parsed, sources, power_path, raw) -> int:
     msg = f"archived run {run['run_id']} ({run['model']} on {run['machine']}, {len(run['cells'])} tests"
     if samples:
         msg += f", watts on {joined}"
-    print(msg + f") -> {path}")
+    print(msg + f") -> {os.path.normpath(path)}")
     return 0
 
 
@@ -333,7 +333,7 @@ def cmd_html(args) -> int:
     os.makedirs(parent, exist_ok=True)
     with open(args.output, "w", encoding="utf-8", newline="\n") as fh:
         fh.write(page)
-    print(f"wrote {args.output} ({len(runs)} runs)")
+    print(f"wrote {os.path.normpath(args.output)} ({len(runs)} runs)")
     return 0
 
 

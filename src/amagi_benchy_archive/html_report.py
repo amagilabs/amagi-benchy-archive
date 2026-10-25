@@ -7,6 +7,7 @@ No JavaScript and no external assets, so the file can be published as-is
 
 from __future__ import annotations
 
+import math
 from datetime import datetime, timezone
 from html import escape
 from typing import List, Optional, Sequence
@@ -58,20 +59,41 @@ footer a{color:var(--text-secondary)}
 """
 
 
+def _nice_axis(vmax: float, target: int = 5) -> tuple:
+    """Round axis top, step and label decimals, about `target` intervals: 0-50 by 10."""
+    if vmax <= 0:
+        return 1.0, 0.25, 2
+    mag = 10 ** math.floor(math.log10(vmax / target))
+    best = None
+    for scale in (mag / 10, mag, mag * 10):
+        for m in (1, 2, 2.5, 5):
+            step = m * scale
+            top = math.ceil(vmax / step - 1e-9) * step
+            score = (abs(top / step - target), top)
+            if best is None or score < best[0]:
+                best = (score, top, step, m)
+    _, top, step, _ = best
+    decimals = max(0, -math.floor(math.log10(step) + 1e-9))
+    if abs(step * 10 ** decimals - round(step * 10 ** decimals)) > 1e-6:
+        decimals += 1
+    return top, step, decimals
+
+
 def _bar_chart(items: Sequence[tuple], unit: str, digits: int = 1) -> str:
     """Horizontal bars. items: (label, value, tooltip)."""
     items = [i for i in items if i[1] is not None]
     if not items:
         return ""
     label_w, chart_w, bar_h, gap = 300, 560, 20, 12
-    vmax = max(v for _, v, _ in items) or 1.0
+    vmax, step, decimals = _nice_axis(max(v for _, v, _ in items))
     width = label_w + chart_w + 90
     height = len(items) * (bar_h + gap) + 24
     out = [f'<svg viewBox="0 0 {width} {height}" role="img" aria-label="{escape(unit)} by setup">']
-    for t in range(5):
-        x = label_w + chart_w * t / 4
+    for t in range(int(round(vmax / step)) + 1):
+        x = label_w + chart_w * t * step / vmax
         out.append(f'<line class="grid" x1="{x:.1f}" y1="0" x2="{x:.1f}" y2="{height - 20}"/>')
-        out.append(f'<text class="muted" x="{x:.1f}" y="{height - 4}" text-anchor="middle">{fmt(vmax * t / 4, 0)}</text>')
+        out.append(f'<text class="muted" x="{x:.1f}" y="{height - 4}" text-anchor="middle">'
+                   f'{fmt(t * step, decimals)}</text>')
     for i, (label, v, tip) in enumerate(items):
         y = i * (bar_h + gap) + 4
         w = max(chart_w * v / vmax, 2.0)
@@ -92,7 +114,7 @@ def _bar_chart(items: Sequence[tuple], unit: str, digits: int = 1) -> str:
 
 def _sparkline(points: Sequence[tuple], unit: str) -> str:
     """points: (started, value, run_id). Line with an end dot and end label."""
-    w, h, pad_l, pad_r, pad_y = 280, 90, 6, 56, 12
+    w, h, pad_l, pad_r, pad_y = 280, 100, 6, 56, 20
     vals = [p[1] for p in points]
     lo, hi = min(vals), max(vals)
     if hi == lo:
@@ -106,13 +128,18 @@ def _sparkline(points: Sequence[tuple], unit: str) -> str:
 
     coords = [xy(i, v) for i, v in enumerate(vals)]
     d = " ".join(f"{'M' if i == 0 else 'L'}{x:.1f},{y:.1f}" for i, (x, y) in enumerate(coords))
-    out = [f'<svg viewBox="0 0 {w} {h}" role="img" aria-label="{escape(unit)} over {n} runs">',
+    # fixed pixel size: stretched to the card width the labels would scale up with it
+    out = [f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" role="img" aria-label="{escape(unit)} over {n} runs">',
            f'<line class="grid" x1="{pad_l}" y1="{h - pad_y}" x2="{w - pad_r}" y2="{h - pad_y}"/>',
            f'<path class="line" d="{d}"/>']
     for (x, y), (started, v, rid) in zip(coords, points):
         out.append(f'<g><title>{escape(started[:16])} · {fmt(v)} {escape(unit)} · run {rid[:8]}</title>'
                    f'<circle cx="{x:.1f}" cy="{y:.1f}" r="9" fill="transparent"/>'
                    f'<circle class="dot" cx="{x:.1f}" cy="{y:.1f}" r="4"/></g>')
+    if n > 1:  # first value too, so the line's drop or rise reads in numbers, not just slope
+        x0, y0 = coords[0]
+        above = coords[1][1] >= y0  # put it on the side the line leaves from
+        out.append(f'<text class="muted" x="{x0:.1f}" y="{y0 - 8 if above else y0 + 18:.1f}">{fmt(vals[0])}</text>')
     x, y = coords[-1]
     out.append(f'<text x="{x + 8:.1f}" y="{y + 4:.1f}">{fmt(vals[-1])}</text>')
     out.append(f'<text class="muted" x="{pad_l}" y="{h - 1}">{escape(points[0][0][:10])}</text>')

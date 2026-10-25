@@ -124,3 +124,11 @@ def test_html_render_contains_sections_and_credit():
 def test_html_render_empty_archive_message():
     page = render([])
     assert "No archived run" in page
+
+
+def test_bar_axis_uses_round_ticks():
+    from amagi_benchy_archive.html_report import _nice_axis
+    assert _nice_axis(49.8) == (50, 10, 0)
+    assert _nice_axis(0.17)[:2] == (pytest.approx(0.2), pytest.approx(0.05))
+    assert _nice_axis(0.17)[2] == 2
+    assert _nice_axis(0.0123)[2] == 4
