@@ -92,7 +92,9 @@ def test_errors_are_clean(tmp_path, capsys):
     bad.write_text('{"schema": "llama-benchy-progress.v1", "type": "header", "ts": 1}\n{oops\n')
     assert main(["ingest", str(bad), "-a", str(tmp_path)]) == 2
     assert "line 2" in capsys.readouterr().err
+    capsys.readouterr()
     assert main(["show", "nope", "-a", str(tmp_path)]) == 2
+    assert "no run id starts with 'nope'\n" in capsys.readouterr().err
     assert main(["html", "-a", str(tmp_path / "empty")]) == 2
 
 

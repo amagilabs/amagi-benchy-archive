@@ -273,7 +273,7 @@ def cmd_show(args) -> int:
     try:
         run = find_run(archive_dir(args.archive), args.run_id)
     except KeyError as exc:
-        return _err(str(exc).strip("'\""))
+        return _err(exc.args[0])  # str(KeyError) would add quotes around the message
     if args.format == "json":
         print(json.dumps(run, indent=2))
         return 0
