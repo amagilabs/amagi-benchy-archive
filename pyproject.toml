@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=77.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "amagi-benchy-archive"
+version = "0.1.0"
+description = "Keep every llama-benchy run from every machine in one archive, with GPU watts joined in: leaderboard, tokens per joule, regressions, and one static HTML page."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE", "THIRD_PARTY_NOTICES.md"]
+authors = [{ name = "AmagiLabs (Amagisolutionsgroup, Inc.)", email = "dev@amagisolutionsgroup.com" }]
+requires-python = ">=3.9"
+dependencies = []
+keywords = ["llm", "benchmark", "llama-benchy", "llama.cpp", "vllm", "leaderboard", "gpu", "power", "nvidia-smi", "localllama", "cli"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "Environment :: Console",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: System :: Benchmark",
+]
+
+[project.urls]
+Homepage = "https://github.com/amagilabs/amagi-benchy-archive"
+
+[project.scripts]
+amagi-benchy-archive = "amagi_benchy_archive.cli:main"
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
