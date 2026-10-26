@@ -79,16 +79,18 @@ amagi-benchy-archive power-log -o power.csv     # sampler on its own, Ctrl-C to 
 
 ### Read the archive
 
-Every output below is real, from the two mock-server runs in
-[`examples/demo-archive`](examples/demo-archive). The mock server has no GPU,
-so the watts and tok/J columns are empty.
+Every output below is real, from
+[`examples/demo-archive`](examples/demo-archive): two mock-server runs on a
+laptop (no GPU, so no watts) and one run of Qwen2.5-7B Q4_K_M on llama.cpp on
+an RTX 3090, with watts.
 
 ```
 $ amagi-benchy-archive runs
-run       started               machine  gpu                              model       cells  power  tag
---------  --------------------  -------  -------------------------------  ----------  -----  -----  ------
-2b85376f  2026-10-25T06:46:41Z  laptop   none (llama-benchy mock server)  mock-model     12  -      first
-100807da  2026-10-25T06:55:01Z  laptop   none (llama-benchy mock server)  mock-model      2  -      second
+run       started               machine      gpu                              model                     cells  power              tag
+--------  --------------------  -----------  -------------------------------  ------------------------  -----  -----------------  ------
+2b85376f  2026-10-25T06:46:41Z  laptop       none (llama-benchy mock server)  mock-model                   12  -                  first
+100807da  2026-10-25T06:55:01Z  laptop       none (llama-benchy mock server)  mock-model                    2  -                  second
+e028d99e  2026-10-26T06:26:51Z  llm-testbed  NVIDIA GeForce RTX 3090          Qwen/Qwen2.5-7B-Instruct      8  yes (296 samples)
 ```
 
 `show <run id>` lists every test in one run. A prefix of the id is enough.
@@ -104,6 +106,17 @@ test pp2048/tg32, latest run per setup, sorted by gen t/s
 #  model       machine  gpu                                gen t/s  prompt t/s  TTFT ms  watts  tok/J  date        run
 -  ----------  -------  -------------------------------  ---------  ----------  -------  -----  -----  ----------  --------
 1  mock-model  laptop   none (llama-benchy mock server)  50.8 ±0.5         979    2,098      -      -  2026-10-25  100807da
+```
+
+The 3090 run has watts, so it can be ranked by tokens per joule:
+
+```
+$ amagi-benchy-archive leaderboard --pp 512 --tg 128 --sort tok_per_j
+test pp512/tg128, latest run per setup, sorted by tok/J
+
+#  model                     machine      gpu                         gen t/s  prompt t/s  TTFT ms  watts  tok/J  date        run
+-  ------------------------  -----------  -----------------------  ----------  ----------  -------  -----  -----  ----------  --------
+1  Qwen/Qwen2.5-7B-Instruct  llm-testbed  NVIDIA GeForce RTX 3090  140.4 ±0.0       4,486      115    283  0.496  2026-10-26  e028d99e
 ```
 
 `--format md` gives a table you can paste into a post:
