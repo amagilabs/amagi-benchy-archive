@@ -31,9 +31,6 @@ and makes no network calls of its own.
 pipx install amagi-benchy-archive
 ```
 
-(Not yet published to PyPI. Until it is, install from GitHub:
-`pipx install git+https://github.com/amagilabs/amagi-benchy-archive@v0.1.0`.)
-
 Python 3.9 or newer. You also need llama-benchy 0.4.0 or later on your PATH
 (`pipx install llama-benchy`), the first release with `--emit-progress`.
 
